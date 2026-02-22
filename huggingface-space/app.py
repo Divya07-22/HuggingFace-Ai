@@ -6,6 +6,7 @@ from huggingface_hub import InferenceClient
 # KodBank AI Assistant — Hugging Face Space
 # Model: Qwen/Qwen2.5-72B-Instruct (Kimi-like)
 # Deploy this file as a Gradio Space on huggingface.co
+# Set HF_TOKEN in Space Settings → Variables and secrets
 # ====================================================
 
 HF_TOKEN = os.environ.get("HF_TOKEN")  # Set this in Space secrets
@@ -16,19 +17,21 @@ client = InferenceClient(
 )
 
 SYSTEM_PROMPT = """You are KodBank AI Assistant — a helpful, concise, and knowledgeable banking assistant.
-Help users with their banking queries, financial advice, account management, spending analysis, 
+Help users with their banking queries, financial advice, account management, spending analysis,
 savings goals, and general financial questions. Keep answers clear and actionable."""
 
 
 def chat(message, history):
     """
-    Chat function called by Gradio.
-    history: list of [user, assistant] message pairs
+    Chat function for Gradio 4+ ChatInterface.
+    history: list of {"role": ..., "content": ...} dicts (messages format)
     """
     messages = [{"role": "system", "content": SYSTEM_PROMPT}]
-    for user_msg, assistant_msg in history:
-        messages.append({"role": "user", "content": user_msg})
-        messages.append({"role": "assistant", "content": assistant_msg})
+
+    # Gradio 4+ passes history as list of dicts with "role" and "content"
+    for h in history:
+        messages.append({"role": h["role"], "content": h["content"]})
+
     messages.append({"role": "user", "content": message})
 
     response = ""
@@ -55,25 +58,26 @@ with gr.Blocks(
     ),
     title="KodBank AI Assistant",
     css="""
+    body { background: #0d0d1a !important; }
     .gradio-container { background: #0d0d1a !important; }
-    .chat-bubble-bot { background: #1a1a2e !important; color: #e2e8f0 !important; }
-    .chat-bubble-user { background: #ff6b35 !important; color: white !important; }
     """,
 ) as demo:
     gr.Markdown(
         """
         # 🏦 KodBank AI Assistant
-        **Powered by Hugging Face Inference API**  
+        **Powered by Hugging Face Inference API**
         Ask me anything about your banking, finances, or investments!
         """
     )
 
-    chatbot = gr.ChatInterface(
+    gr.ChatInterface(
         fn=chat,
+        type="messages",
         chatbot=gr.Chatbot(
             height=480,
             show_label=False,
             bubble_full_width=False,
+            type="messages",
         ),
         textbox=gr.Textbox(
             placeholder="e.g. How can I save more money each month?",
