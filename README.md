@@ -2,6 +2,8 @@
 
 > **Banking App** with an embedded **Hugging Face AI Assistant** — chat with AI models (Kimi/Qwen, Deepseek, Mistral, Qwen-Coder) right inside your banking dashboard!
 
+Frontend URL : https://hugging-face-ai-3gvw.vercel.app/
+Backend URL : https://hugging-face-ai-roan.vercel.app/
 ## 🎯 What This Project Does
 
 ```
