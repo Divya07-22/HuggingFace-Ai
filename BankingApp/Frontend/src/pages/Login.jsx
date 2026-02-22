@@ -9,8 +9,9 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000").replace(/\/$/, "");
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(credentials)
@@ -33,34 +34,34 @@ export default function Login() {
       <div className="bg-[#1e1f25] p-10 rounded-2xl shadow-xl w-[400px] flex flex-col items-center">
         <h1 className="text-3xl font-bold text-white mb-2">Kodbank Login</h1>
         <p className="text-gray-400 mb-8">Secure access to your wealth</p>
-        
+
         <form onSubmit={handleSubmit} className="w-full space-y-4">
           <div className="relative">
             <User className="absolute left-3 top-3 text-gray-500 w-5 h-5" />
-            <input 
-              type="text" 
-              placeholder="Username" 
+            <input
+              type="text"
+              placeholder="Username"
               className="w-full bg-[#2a2b32] text-white border border-gray-700 rounded-lg py-3 pl-10 pr-4 focus:outline-none focus:border-orange-500"
-              onChange={(e) => setCredentials({...credentials, username: e.target.value})}
+              onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
               required
             />
           </div>
           <div className="relative">
             <Lock className="absolute left-3 top-3 text-gray-500 w-5 h-5" />
-            <input 
-              type="password" 
-              placeholder="Password" 
+            <input
+              type="password"
+              placeholder="Password"
               className="w-full bg-[#2a2b32] text-white border border-gray-700 rounded-lg py-3 pl-10 pr-4 focus:outline-none focus:border-orange-500"
-              onChange={(e) => setCredentials({...credentials, password: e.target.value})}
+              onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
               required
             />
           </div>
-          
+
           <button type="submit" className="w-full bg-gradient-to-r from-orange-500 to-pink-500 text-white font-semibold py-3 rounded-lg mt-4 shadow-lg shadow-orange-500/20">
             Login →
           </button>
         </form>
-        
+
         <p className="text-gray-400 mt-6 text-sm">
           Don't have an account? <Link to="/register" className="text-orange-500 font-semibold hover:underline">Register here</Link>
         </p>

@@ -7,7 +7,7 @@ const MODELS = [
     { id: "quin", label: "Quin / Coder", color: "#a855f7" },
 ];
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_BASE = (import.meta.env.VITE_API_URL || "http://localhost:5000").replace(/\/$/, "");
 
 export default function AiChat() {
     const [isOpen, setIsOpen] = useState(false);
